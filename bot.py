@@ -31,7 +31,11 @@ async def handle_docs(message: types.Message):
         file_path = file_info.file_path
         downloaded_file = await bot.download_file(file_path)
 
-        content = downloaded_file.read().decode('utf-8')
+        try:
+            content = downloaded_file.read().decode('utf-8')
+        except UnicodeDecodeError:
+            await message.reply("Ошибка: Файл должен быть в кодировке UTF-8.")
+            return
         csv_reader = csv.reader(StringIO(content))
         domains = [row[0] for row in csv_reader]
 
@@ -45,6 +49,7 @@ async def handle_docs(message: types.Message):
             await message.reply("Совпадений не найдено.")
     else:
         await message.reply("Пожалуйста, пришлите CSV файл.")
+
 
 # Запуск процесса поллинга новых апдейтов
 async def main():
