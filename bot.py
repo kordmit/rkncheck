@@ -26,6 +26,7 @@ async def send_welcome(message: types.Message):
 @dp.message(F.document)
 async def handle_docs(message: types.Message):
     if message.document.mime_type == 'text/csv':
+        await message.reply("Проверяю CSV файл... 1-10 минут, в зависимости от кол-ва доменов")
         document_id = message.document.file_id
         file_info = await bot.get_file(document_id)
         file_path = file_info.file_path
